@@ -1,0 +1,9 @@
+{
+  "createdAt": "2025-05-16T18:13:31.903Z",
+  "updatedAt": "2025-05-16T21:26:03.211Z",
+  "id": "PlqkVxA5kqnJGc8A",
+  "name": "Supabase docker",
+  "data": "U2FsdGVkX18syyR3XDIhP1ScgtHGFM4gCyjS+6KIxMaR6gavxaxrHbinOVrp3G3mf+4I5bhZ0qvicJql6PBURL7jTLoMfI9VKOqF0ebyWNqbxDsEnc3uSamBaiL4zbQoo5FkZUeW4OaC1DUfgywoRIZZkDzuOmpTB9Zdy2Zj3JiUiyoYoMKsd+qmEm5RpkSsPwunOKQxh6ZMD5i40TBhUrv9OfZQ2CLDW2krmRwdjwMna1/VXGNsLQUWpA9XYsd/Jyi788tC2jfz6MUDD9X4VTXd40twGh56Z2hEftfvKUYr2OKUXViDhntxneouCS0I",
+  "type": "supabaseApi",
+  "isManaged": false
+}

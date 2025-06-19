@@ -1,0 +1,9 @@
+{
+  "createdAt": "2025-05-30T15:19:30.526Z",
+  "updatedAt": "2025-05-30T15:19:30.466Z",
+  "id": "2V7fVDigAkjvTXD3",
+  "name": "Unnamed credential",
+  "data": "U2FsdGVkX1+DilM/4aelXIxS6ugweKz8RKhP2sqDzjLv1PUWmwFWA7PM1M2c8Kfhbt9n2J/tajPiR0R2VGYCYM1b1r7YKi/ljT+YhiHD3EXgIFgJedbT0LdjDCPfOQmL",
+  "type": "httpBasicAuth",
+  "isManaged": false
+}

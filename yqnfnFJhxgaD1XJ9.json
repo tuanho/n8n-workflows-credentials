@@ -1,0 +1,515 @@
+{
+  "createdAt": "2025-06-08T12:44:23.166Z",
+  "updatedAt": "2025-06-12T15:01:15.000Z",
+  "id": "yqnfnFJhxgaD1XJ9",
+  "name": "My workflow 3",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bitbucket-AI-Codereview",
+        "options": {}
+      },
+      "name": "Bitbucket Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1480,
+        280
+      ],
+      "id": "028c4910-284c-435a-be0f-e53860cfec29",
+      "webhookId": "c0b0a357-7877-4fcf-a7aa-659c218228d0"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prData = {  \n  // pull_request_id: 521,\n  pull_request_id:$input.first().json.body.pullrequest.id ,\n  source_branch: $input.first().json.body.pullrequest.source.branch.name,\n  target_branch: $input.first().json.body.pullrequest.destination.branch.name,\n//  source_branch: \"bugfix/CHEM-1282-display-not-found\",\n//   target_branch: \"trunk\",\n// repository: \"chemrequest-ui\"\n  repository: $input.first().json.body.repository.name\n};\n\nreturn prData;"
+      },
+      "id": "1d49e36d-4a78-46c0-8a77-916dd6414be1",
+      "name": "Prepare PR Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1260,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://bitbucket-code-reviewer:8080/review",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "70956e0d-2ab5-46c2-a422-98698f0ce017",
+      "name": "Call Review Service",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1040,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process the review response\nconst reviewData = $input.all();\n\nconsole.log('Review completed successfully!');\nconsole.log('Response:', JSON.stringify(reviewData, null, 2));\n\n// Extract the review results\nconst response = reviewData[0].json;\n\nreturn {\n  reviewData: JSON.stringify(reviewData),\n  status: 'success',\n  review_id: response.review_id || 'unknown',\n  summary: response.summary || 'Review completed',\n  score: response.score || 0,\n  recommendations: response.recommendations || [],\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "b9efb17a-68d9-4602-ab83-2c50475b1fde",
+      "name": "Process Review Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -820,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "condition1",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": 7,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "df36f7c2-f8ae-4fa8-85e4-c2a38cf10412",
+      "name": "Check Review Score",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -600,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle high score (good code)\nconst data = $input.all()[0].json;\n\nconsole.log('✅ Code review passed! Score:', data.score);\n\nreturn {\n  action: 'approve',\n  message: `Code review passed with score ${data.score}/10`,\n  next_steps: ['Merge PR', 'Deploy to staging'],\n  details: data\n};"
+      },
+      "id": "885d497a-a1c5-4198-805b-8a75a978e877",
+      "name": "High Score Action",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -380,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle low score (needs improvement)\nconst data = $input.all()[0].json;\n\nconsole.log('⚠️ Code review needs attention. Score:', data.score);\n\nreturn {\n  action: 'request_changes',\n  message: `Code review score is ${data.score}/10 - improvements needed`,\n  next_steps: ['Address recommendations', 'Re-submit for review'],\n  recommendations: data.recommendations,\n  details: data\n};"
+      },
+      "id": "e26356ca-f9af-4894-9b8a-780f11e0ab6c",
+      "name": "Low Score Action",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -380,
+        380
+      ]
+    }
+  ],
+  "connections": {
+    "Bitbucket Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare PR Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare PR Data": {
+      "main": [
+        [
+          {
+            "node": "Call Review Service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Review Service": {
+      "main": [
+        [
+          {
+            "node": "Process Review Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Review Response": {
+      "main": [
+        [
+          {
+            "node": "Check Review Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Review Score": {
+      "main": [
+        [
+          {
+            "node": "High Score Action",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Low Score Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Bitbucket Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "Upgrade",
+            "host": "chatbot.integrion.ai",
+            "x-real-ip": "172.68.174.46",
+            "x-forwarded-for": "2401:1d80:3224:5:e70e:8fd9:677c:ffbb, 172.68.174.46",
+            "x-forwarded-proto": "http",
+            "content-length": "6453",
+            "x-request-id": "8d807be5-d87b-49dd-8cc0-05e8259fcacf",
+            "via": "1.1 ip-10-18-21-82 (squid)",
+            "x-atl-outbound-proxy": "true",
+            "cache-control": "max-age=259200",
+            "cf-ray": "94d962d7fdc5efa4-PDX",
+            "cf-visitor": "{\"scheme\":\"http\"}",
+            "x-event-key": "pullrequest:updated",
+            "x-hook-uuid": "4f632c04-6bd2-410a-9ffc-285ea89b4056",
+            "x-event-time": "Tue, 10 Jun 2025 13:58:52 GMT",
+            "user-agent": "Bitbucket-Webhooks/2.0",
+            "x-attempt-number": "1",
+            "x-request-uuid": "c3dd0e94-1ba2-4c19-bf32-45f7d57788be",
+            "content-type": "application/json",
+            "traceparent": "00-68483a1d6efcca437711149d5612f8c2-37d29a8511d89396-00",
+            "x-b3-traceid": "68483a1d6efcca437711149d5612f8c2",
+            "x-b3-spanid": "37d29a8511d89396",
+            "x-b3-parentspanid": "7711149d5612f8c2",
+            "x-b3-sampled": "0",
+            "accept": "*/*",
+            "x-envoy-internal": "true",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "2401:1d80:3224:5:e70e:8fd9:677c:ffbb",
+            "cf-ipcountry": "US",
+            "accept-encoding": "gzip, br"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "repository": {
+              "type": "repository",
+              "full_name": "netpowerweb/revisjonsdatabasen-api",
+              "links": {
+                "self": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api"
+                },
+                "html": {
+                  "href": "https://bitbucket.org/netpowerweb/revisjonsdatabasen-api"
+                },
+                "avatar": {
+                  "href": "https://bytebucket.org/ravatar/%7Bca303d99-3aef-46a0-8415-6dcacab377a9%7D?ts=c_sharp"
+                }
+              },
+              "name": "revisjonsdatabasen-api",
+              "scm": "git",
+              "website": null,
+              "owner": {
+                "display_name": "Netpower Web Solution",
+                "links": {
+                  "self": {
+                    "href": "https://api.bitbucket.org/2.0/workspaces/%7Be4aa0946-1210-4f07-a1c9-c6da757b7793%7D"
+                  },
+                  "avatar": {
+                    "href": "https://bitbucket.org/account/netpowerweb/avatar/"
+                  },
+                  "html": {
+                    "href": "https://bitbucket.org/%7Be4aa0946-1210-4f07-a1c9-c6da757b7793%7D/"
+                  }
+                },
+                "type": "team",
+                "uuid": "{e4aa0946-1210-4f07-a1c9-c6da757b7793}",
+                "username": "netpowerweb"
+              },
+              "workspace": {
+                "type": "workspace",
+                "uuid": "{e4aa0946-1210-4f07-a1c9-c6da757b7793}",
+                "name": "Netpower Web Solution",
+                "slug": "netpowerweb",
+                "links": {
+                  "avatar": {
+                    "href": "https://bitbucket.org/workspaces/netpowerweb/avatar/?ts=1704890097"
+                  },
+                  "html": {
+                    "href": "https://bitbucket.org/netpowerweb/"
+                  },
+                  "self": {
+                    "href": "https://api.bitbucket.org/2.0/workspaces/netpowerweb"
+                  }
+                }
+              },
+              "is_private": true,
+              "project": {
+                "type": "project",
+                "key": "SNM",
+                "uuid": "{bbd3b4b1-c7c5-4a69-83f3-3dc22187fe9a}",
+                "name": "Stiftelsen Norsk Mat",
+                "links": {
+                  "self": {
+                    "href": "https://api.bitbucket.org/2.0/workspaces/netpowerweb/projects/SNM"
+                  },
+                  "html": {
+                    "href": "https://bitbucket.org/netpowerweb/workspace/projects/SNM"
+                  },
+                  "avatar": {
+                    "href": "https://bitbucket.org/netpowerweb/workspace/projects/SNM/avatar/32?ts=1670585598"
+                  }
+                }
+              },
+              "uuid": "{ca303d99-3aef-46a0-8415-6dcacab377a9}",
+              "parent": null
+            },
+            "actor": {
+              "display_name": "Tuan Ho",
+              "links": {
+                "self": {
+                  "href": "https://api.bitbucket.org/2.0/users/%7B52f556a7-2fac-4a51-9bb7-338ce2ff4340%7D"
+                },
+                "avatar": {
+                  "href": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/TH-4.png"
+                },
+                "html": {
+                  "href": "https://bitbucket.org/%7B52f556a7-2fac-4a51-9bb7-338ce2ff4340%7D/"
+                }
+              },
+              "type": "user",
+              "uuid": "{52f556a7-2fac-4a51-9bb7-338ce2ff4340}",
+              "account_id": "60375005f032740068799c1f",
+              "nickname": "Tuan Ho"
+            },
+            "pullrequest": {
+              "comment_count": 0,
+              "task_count": 0,
+              "type": "pullrequest",
+              "id": 1113,
+              "title": "Test a random",
+              "description": "",
+              "rendered": {
+                "title": {
+                  "type": "rendered",
+                  "raw": "Test a random",
+                  "markup": "markdown",
+                  "html": "<p>Test a random</p>"
+                },
+                "description": {
+                  "type": "rendered",
+                  "raw": "",
+                  "markup": "markdown",
+                  "html": ""
+                }
+              },
+              "state": "OPEN",
+              "draft": true,
+              "merge_commit": null,
+              "close_source_branch": false,
+              "closed_by": null,
+              "author": {
+                "display_name": "Tuan Ho",
+                "links": {
+                  "self": {
+                    "href": "https://api.bitbucket.org/2.0/users/%7B52f556a7-2fac-4a51-9bb7-338ce2ff4340%7D"
+                  },
+                  "avatar": {
+                    "href": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/initials/TH-4.png"
+                  },
+                  "html": {
+                    "href": "https://bitbucket.org/%7B52f556a7-2fac-4a51-9bb7-338ce2ff4340%7D/"
+                  }
+                },
+                "type": "user",
+                "uuid": "{52f556a7-2fac-4a51-9bb7-338ce2ff4340}",
+                "account_id": "60375005f032740068799c1f",
+                "nickname": "Tuan Ho"
+              },
+              "reason": "",
+              "created_on": "2025-06-06T11:56:57.401877+00:00",
+              "updated_on": "2025-06-10T13:58:52.467553+00:00",
+              "destination": {
+                "branch": {
+                  "name": "TestAutoCodeReview"
+                },
+                "commit": {
+                  "hash": "d2fb919f62bc",
+                  "links": {
+                    "self": {
+                      "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/commit/d2fb919f62bc"
+                    },
+                    "html": {
+                      "href": "https://bitbucket.org/netpowerweb/revisjonsdatabasen-api/commits/d2fb919f62bc"
+                    }
+                  },
+                  "type": "commit"
+                },
+                "repository": {
+                  "type": "repository",
+                  "full_name": "netpowerweb/revisjonsdatabasen-api",
+                  "links": {
+                    "self": {
+                      "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api"
+                    },
+                    "html": {
+                      "href": "https://bitbucket.org/netpowerweb/revisjonsdatabasen-api"
+                    },
+                    "avatar": {
+                      "href": "https://bytebucket.org/ravatar/%7Bca303d99-3aef-46a0-8415-6dcacab377a9%7D?ts=c_sharp"
+                    }
+                  },
+                  "name": "revisjonsdatabasen-api",
+                  "uuid": "{ca303d99-3aef-46a0-8415-6dcacab377a9}"
+                }
+              },
+              "source": {
+                "branch": {
+                  "name": "hotfix/KSL-1068-clone---test-auto-code-review",
+                  "links": {},
+                  "sync_strategies": [
+                    "merge_commit",
+                    "rebase"
+                  ]
+                },
+                "commit": {
+                  "hash": "cdfa2b49d20f",
+                  "links": {
+                    "self": {
+                      "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/commit/cdfa2b49d20f"
+                    },
+                    "html": {
+                      "href": "https://bitbucket.org/netpowerweb/revisjonsdatabasen-api/commits/cdfa2b49d20f"
+                    }
+                  },
+                  "type": "commit"
+                },
+                "repository": {
+                  "type": "repository",
+                  "full_name": "netpowerweb/revisjonsdatabasen-api",
+                  "links": {
+                    "self": {
+                      "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api"
+                    },
+                    "html": {
+                      "href": "https://bitbucket.org/netpowerweb/revisjonsdatabasen-api"
+                    },
+                    "avatar": {
+                      "href": "https://bytebucket.org/ravatar/%7Bca303d99-3aef-46a0-8415-6dcacab377a9%7D?ts=c_sharp"
+                    }
+                  },
+                  "name": "revisjonsdatabasen-api",
+                  "uuid": "{ca303d99-3aef-46a0-8415-6dcacab377a9}"
+                }
+              },
+              "reviewers": [],
+              "participants": [],
+              "links": {
+                "self": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113"
+                },
+                "html": {
+                  "href": "https://bitbucket.org/netpowerweb/revisjonsdatabasen-api/pull-requests/1113"
+                },
+                "commits": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113/commits"
+                },
+                "approve": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113/approve"
+                },
+                "request-changes": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113/request-changes"
+                },
+                "diff": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/diff/netpowerweb/revisjonsdatabasen-api:cdfa2b49d20f%0Dd2fb919f62bc?from_pullrequest_id=1113&topic=true"
+                },
+                "diffstat": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/diffstat/netpowerweb/revisjonsdatabasen-api:cdfa2b49d20f%0Dd2fb919f62bc?from_pullrequest_id=1113&topic=true"
+                },
+                "comments": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113/comments"
+                },
+                "activity": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113/activity"
+                },
+                "merge": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113/merge"
+                },
+                "decline": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113/decline"
+                },
+                "statuses": {
+                  "href": "https://api.bitbucket.org/2.0/repositories/netpowerweb/revisjonsdatabasen-api/pullrequests/1113/statuses"
+                }
+              },
+              "summary": {
+                "type": "rendered",
+                "raw": "",
+                "markup": "markdown",
+                "html": ""
+              }
+            }
+          },
+          "webhookUrl": "http://chatbot.integrion.ai/webhook-test/bitbucket-AI-Codereview",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "52630479-8c44-4083-888c-967f3e67130b",
+  "triggerCount": 1,
+  "tags": []
+}

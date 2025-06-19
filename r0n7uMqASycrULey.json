@@ -1,0 +1,191 @@
+{
+  "createdAt": "2025-06-04T09:58:24.421Z",
+  "updatedAt": "2025-06-19T22:48:35.000Z",
+  "id": "r0n7uMqASycrULey",
+  "name": "Backup of workflows and credentials to Github",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "On clicking 'execute'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -100,
+        -60
+      ],
+      "typeVersion": 1,
+      "id": "6ddf0669-fba1-4645-8194-6c051594a0ff"
+    },
+    {
+      "parameters": {
+        "command": "npx n8n export:workflow --backup --output /home/node/.n8n/n8n-workflows-credentials\n"
+      },
+      "name": "Export Workflows",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        120,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "b92897a2-6243-472e-b03f-f065b02cb32a"
+    },
+    {
+      "parameters": {
+        "command": "npx n8n export:credentials --backup --output /home/node/.n8n/n8n-workflows-credentials"
+      },
+      "name": "Export Credentials",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        340,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "5644c7b5-e97b-405e-b662-8833531e5fd2"
+    },
+    {
+      "parameters": {
+        "command": "git -C /home/node/.n8n/n8n-workflows-credentials add ."
+      },
+      "name": "git add",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        560,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "7a6c9f0f-366f-44ca-bd47-a9fa87eb206a"
+    },
+    {
+      "parameters": {
+        "command": "=git -C /home/node/.n8n/n8n-workflows-credentials diff-index --quiet HEAD || git -C /home/node/.n8n/n8n-workflows-credentials commit -m \"Auto backup ({{ new Date().toISOString() }})\"\n"
+      },
+      "name": "git commit",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        780,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "da846afb-0b57-4fcb-b1ca-fd605dd79a63"
+    },
+    {
+      "parameters": {
+        "command": "git -C /home/node/.n8n/n8n-workflows-credentials push"
+      },
+      "name": "git push",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [
+        1000,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "6cd82493-4852-4db2-8606-8ab3ad83fbed"
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "hour": 0
+            },
+            {
+              "hour": 12
+            },
+            {
+              "hour": 6
+            },
+            {
+              "hour": 18
+            }
+          ]
+        }
+      },
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "position": [
+        -100,
+        -260
+      ],
+      "typeVersion": 1,
+      "id": "ac7fbc43-077c-41f0-8fb3-c03776548ee5"
+    }
+  ],
+  "connections": {
+    "On clicking 'execute'": {
+      "main": [
+        [
+          {
+            "node": "Export Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export Workflows": {
+      "main": [
+        [
+          {
+            "node": "Export Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export Credentials": {
+      "main": [
+        [
+          {
+            "node": "git add",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "git add": {
+      "main": [
+        [
+          {
+            "node": "git commit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "git commit": {
+      "main": [
+        [
+          {
+            "node": "git push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "Export Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "ccd9fc05-f688-4943-ac77-5c40140afff8",
+  "triggerCount": 1,
+  "tags": []
+}

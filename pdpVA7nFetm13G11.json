@@ -1,0 +1,200 @@
+{
+  "createdAt": "2025-05-21T09:19:41.755Z",
+  "updatedAt": "2025-06-04T09:45:09.000Z",
+  "id": "pdpVA7nFetm13G11",
+  "name": "[Trung- testing] KSL chatbot (Postgres mem + Qdrant docker)",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1100,
+        -140
+      ],
+      "id": "7ae395d7-fb19-471f-93ef-2b45a81db988",
+      "name": "Memory",
+      "credentials": {
+        "postgres": {
+          "id": "LdtYWDG4KT5XTJXa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}{{ $json.message }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1012,
+        -360
+      ],
+      "id": "b53d7bae-5c47-4f29-b40a-5ccf2d7ad694",
+      "name": "Tryvi - KSL chatbot",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        760,
+        -360
+      ],
+      "id": "7c581660-1418-4399-9b2e-5b2feaff6657",
+      "name": "Start chat here",
+      "webhookId": "96072317-558c-4f00-8876-f50ca2cbab0b"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-nano"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        980,
+        -140
+      ],
+      "id": "a9ae86a8-286c-4b7f-81af-cef257662e39",
+      "name": "GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "tZHVT6xgANDw48fc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1308,
+        60
+      ],
+      "id": "4bb88900-a0f0-4d47-a0dc-50c30e2193e3",
+      "name": "Embeddings GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "tZHVT6xgANDw48fc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "KSL_knowledge_base",
+        "toolDescription": "Bruk denne til å svare på spørsmål om SNM, KSL, LokalMat og NytNorge",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "ksl_knowledge_base",
+          "mode": "list",
+          "cachedResultName": "ksl_knowledge_base"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.1,
+      "position": [
+        1220,
+        -137.5
+      ],
+      "id": "44b3825b-6649-440e-84a9-5317582b1a3a",
+      "name": "Qdrant Vector Store",
+      "credentials": {
+        "qdrantApi": {
+          "id": "by4cZRUMG2dwSSHl",
+          "name": "QdrantApi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start chat here": {
+      "main": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings GPT": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "e0edacb6-874c-4421-bc10-f6ed6acdf017",
+  "triggerCount": 1,
+  "tags": []
+}

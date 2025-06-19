@@ -1,0 +1,482 @@
+{
+  "createdAt": "2025-06-06T08:41:42.786Z",
+  "updatedAt": "2025-06-07T20:01:46.000Z",
+  "id": "QQYtIGHVrhHm3TZ3",
+  "name": "Bitbucket mcp",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "workspace": "=netpowerweb",
+        "events": "={{ [\"pullrequest:created\",\"pullrequest:updated\"] }}"
+      },
+      "id": "fd36a0e4-c09e-43b8-81be-0fd99d516376",
+      "name": "Bitbucket Trigger",
+      "type": "n8n-nodes-base.bitbucketTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1160,
+        120
+      ],
+      "webhookId": "afcbfe51-aa3c-48f9-b146-9773b0fb2610",
+      "credentials": {
+        "bitbucketApi": {
+          "id": "DTWLdUEcW9YebWEv",
+          "name": "Bitbucket account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.pullrequest.state }}",
+              "rightValue": "OPEN",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "ac35db0a-3f58-4498-aa17-8427a1cc835e",
+              "leftValue": "={{ $json.pullrequest.state }}",
+              "rightValue": "open",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "5056ee87-3bb0-48bd-8077-3663f0fefe9c",
+      "name": "Check PR State",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -780,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.bitbucket.org/2.0/repositories/{{ $json.repository.full_name }}/pullrequests/{{ $json.pullrequest.id }}/diff",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "bitbucketApi",
+        "options": {}
+      },
+      "id": "872700bc-f3d7-4f5e-88e5-0417688677fa",
+      "name": "Get PR Diff",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -520,
+        40
+      ],
+      "credentials": {
+        "bitbucketApi": {
+          "id": "DTWLdUEcW9YebWEv",
+          "name": "Bitbucket account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract and format diff content for AI analysis\nconst diffData = $input.first().json;\nconst prData = $('Bitbucket Trigger').item.json;\n\n// Parse diff content\nlet diffContent = '';\nif (typeof diffData === 'string') {\n  diffContent = diffData;\n} else if (diffData.data) {\n  diffContent = diffData.data;\n} else {\n  diffContent = JSON.stringify(diffData);\n}\n\n// Limit diff size for AI processing (max 6000 chars to be safe)\nif (diffContent.length > 6000) {\n  diffContent = diffContent.substring(0, 6000) + '\\n... (diff truncated for AI analysis)';\n}\n\n// Extract PR metadata\nconst prInfo = {\n  title: prData.pullrequest.title,\n  description: prData.pullrequest.description || 'No description provided',\n  author: prData.pullrequest.author.display_name,\n  source_branch: prData.pullrequest.source.branch.name,\n  destination_branch: prData.pullrequest.destination.branch.name,\n  diff: diffContent,\n  repository: prData.repository.full_name,\n  pullrequest_id: prData.pullrequest.id,\n  workspace: 'netpowerweb'\n};\n\nreturn { json: prInfo };"
+      },
+      "id": "ffcc8cc4-b19d-4773-b23c-74bf18186293",
+      "name": "Format Data for AI",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -340,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are a senior software engineer conducting a comprehensive code review for the netpowerweb workspace. Analyze the provided pull request and provide detailed feedback covering:\n\n1. **Code Quality**: Readability, maintainability, best practices\n2. **Security**: Potential vulnerabilities and security concerns\n3. **Performance**: Efficiency and optimization opportunities\n4. **Logic**: Correctness and potential bugs\n5. **Architecture**: Design patterns and structure\n\nFormat your response in markdown with clear sections. Be constructive and specific.\n\nStructure your response as:\n## 🔍 Code Review Summary\n\n### ✅ Positive Aspects\n[What's done well]\n\n### ⚠️ Areas for Improvement\n[Specific issues and suggestions]\n\n### 🔒 Security Analysis\n[Security-related feedback - be thorough here]\n\n### 🚀 Performance Notes\n[Performance-related feedback]\n\n### 📝 Additional Recommendations\n[Other suggestions]\n\n### 🎯 Priority Level\n[LOW/MEDIUM/HIGH] - Based on findings",
+              "role": "system"
+            },
+            {
+              "content": "=Please review this pull request from the netpowerweb workspace:\n\n**Repository:** {{ $json.repository }}\n**Title:** {{ $json.title }}\n**Description:** {{ $json.description }}\n**Author:** {{ $json.author }}\n**Branch:** {{ $json.source_branch }} → {{ $json.destination_branch }}\n**Workspace:** {{ $json.workspace }}\n\n**Code Changes:**\n```diff\n{{ $json.diff }}\n```\n\nPlease provide a thorough analysis focusing especially on security vulnerabilities, code quality, and potential bugs. Consider this is part of the netpowerweb workspace ecosystem."
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 2000,
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -120,
+        100
+      ],
+      "id": "9dcf97b0-9727-4c79-94cc-434524116165",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "tZHVT6xgANDw48fc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process AI review response and extract key information\nconst aiResponse = $json.content;\nconst prData = $('Format Data for AI').item.json;\n\n// Check for critical security issues\nconst securityKeywords = [\n  'sql injection', 'xss', 'cross-site scripting', 'vulnerability', \n  'security risk', 'critical', 'exploit', 'unsafe', 'dangerous',\n  'authentication', 'authorization', 'csrf', 'injection', 'exposure'\n];\n\nconst lowerResponse = aiResponse.toLowerCase();\nconst hasCriticalIssues = securityKeywords.some(keyword => \n  lowerResponse.includes(keyword) && \n  (lowerResponse.includes('critical') || lowerResponse.includes('high') || lowerResponse.includes('vulnerability'))\n);\n\n// Extract priority level if mentioned\nlet priorityLevel = 'MEDIUM';\nif (lowerResponse.includes('priority level')) {\n  if (lowerResponse.includes('high')) priorityLevel = 'HIGH';\n  else if (lowerResponse.includes('low')) priorityLevel = 'LOW';\n}\n\n// Create final review comment\nconst timestamp = new Date().toISOString();\nconst reviewComment = `# 🤖 Automated Code Review (netpowerweb)\n\n${aiResponse}\n\n---\n\n**PR Information:**\n- **Repository:** ${prData.repository}\n- **Author:** ${prData.author}\n- **Branch:** \\`${prData.source_branch}\\` → \\`${prData.destination_branch}\\`\n- **Workspace:** ${prData.workspace}\n- **Reviewed:** ${timestamp}\n- **Priority:** ${priorityLevel}\n\n${hasCriticalIssues ? '🚨 **ATTENTION:** Critical security issues detected!' : '✅ No critical security issues detected'}\n\n---\n\n*This review was automatically generated by AI for the netpowerweb workspace. Please use as supplementary guidance alongside human code review.*`;\n\nreturn {\n  json: {\n    review_comment: reviewComment,\n    has_critical_issues: hasCriticalIssues,\n    priority_level: priorityLevel,\n    repository: prData.repository,\n    pullrequest_id: prData.pullrequest_id,\n    workspace: prData.workspace,\n    ai_response: aiResponse\n  }\n};"
+      },
+      "id": "1c43d22b-a674-4533-b5e7-fb29f930ebef",
+      "name": "Process Review",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.bitbucket.org/2.0/repositories/{{ $json.repository }}/pullrequests/{{ $json.pullrequest_id }}/comments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "bitbucketApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={ \"raw\": $json.review_comment }"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "32978b1b-6d81-4606-b159-0ee24893696f",
+      "name": "Post Review Comment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        476,
+        -100
+      ],
+      "credentials": {
+        "bitbucketApi": {
+          "id": "DTWLdUEcW9YebWEv",
+          "name": "Bitbucket account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.has_critical_issues }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7796a3d5-b484-4450-875e-b0fe67f678fb",
+      "name": "Has Critical Issues?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        476,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.bitbucket.org/2.0/repositories/{{ $json.repository }}/pullrequests/{{ $json.pullrequest_id }}/comments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "bitbucketApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "{ \"raw\": \"🚨 **CRITICAL SECURITY ALERT** 🚨\\n\\n⚠️ This pull request contains **critical security vulnerabilities** that require immediate attention before merging.\\n\\n**Required Actions:**\\n1. 🔍 Review all security findings above\\n2. 🔧 Fix identified vulnerabilities\\n3. ✅ Re-test security measures\\n4. 👥 Request additional security review\\n5. 🔄 Update the PR with fixes\\n\\n**Do not merge until all security issues are resolved.**\\n\\n---\\n*Automated Security Check for netpowerweb workspace - Human verification required*\" }"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f2ba3a7a-df44-4af5-aa39-48d06a5aba6c",
+      "name": "Add Security Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        696,
+        100
+      ],
+      "credentials": {
+        "bitbucketApi": {
+          "id": "DTWLdUEcW9YebWEv",
+          "name": "Bitbucket account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.priority_level }}",
+              "rightValue": "HIGH",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d22ee583-4b6c-47c1-893d-94d5af072ba7",
+      "name": "High Priority?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        476,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.bitbucket.org/2.0/repositories/{{ $json.repository }}/pullrequests/{{ $json.pullrequest_id }}/comments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "bitbucketApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "{ \"raw\": \"⚡ **HIGH PRIORITY REVIEW** ⚡\\n\\n📋 This pull request has been flagged as **HIGH PRIORITY** and requires additional attention.\\n\\n**Recommended Actions:**\\n- 👥 Request review from senior team members\\n- 🧪 Perform thorough testing\\n- 📖 Ensure documentation is updated\\n- 🔍 Double-check all suggested improvements\\n\\n*Please address all feedback before proceeding with merge.*\\n\\n---\\n*netpowerweb workspace automated priority check*\" }"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b414ab80-537c-4281-8ebe-06634710f41a",
+      "name": "Add Priority Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        696,
+        300
+      ],
+      "credentials": {
+        "bitbucketApi": {
+          "id": "DTWLdUEcW9YebWEv",
+          "name": "Bitbucket account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "test-bitbucket",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1140,
+        -80
+      ],
+      "id": "4afe75de-9202-470e-a376-1b0ee62857a7",
+      "name": "Webhook",
+      "webhookId": "747a0884-5672-4198-b686-5d35cf39944b"
+    }
+  ],
+  "connections": {
+    "Bitbucket Trigger": {
+      "main": [
+        [
+          {
+            "node": "Check PR State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check PR State": {
+      "main": [
+        [
+          {
+            "node": "Get PR Diff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get PR Diff": {
+      "main": [
+        [
+          {
+            "node": "Format Data for AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Data for AI": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Process Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Review": {
+      "main": [
+        [
+          {
+            "node": "Post Review Comment",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Has Critical Issues?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "High Priority?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Critical Issues?": {
+      "main": [
+        [
+          {
+            "node": "Add Security Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Priority?": {
+      "main": [
+        [
+          {
+            "node": "Add Priority Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Bitbucket Trigger": {}
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "ae6da240-0de0-4f29-ace3-008373bef12b",
+  "triggerCount": 2,
+  "tags": []
+}

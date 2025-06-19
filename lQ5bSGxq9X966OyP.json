@@ -1,0 +1,236 @@
+{
+  "createdAt": "2025-05-23T21:41:08.756Z",
+  "updatedAt": "2025-06-04T14:46:51.000Z",
+  "id": "lQ5bSGxq9X966OyP",
+  "name": "KSL chatbot (Postgres, Qdrant and Ollama)",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1080,
+        -120
+      ],
+      "id": "3cb81039-14d5-4fae-9360-34ebae8f7bbb",
+      "name": "Memory",
+      "credentials": {
+        "postgres": {
+          "id": "LdtYWDG4KT5XTJXa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        -100
+      ],
+      "id": "c30e6325-1413-45f3-b045-c6afea4724e5",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        760,
+        -360
+      ],
+      "id": "26b5da05-cf38-4ea8-9fd2-9eaac0903f06",
+      "name": "Start chat here",
+      "webhookId": "597aa544-939a-478f-9ac9-63d8f177fe3b"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        -100
+      ],
+      "id": "bc542aee-bd1c-4fbf-b84f-de8736dc8f21",
+      "name": "Google",
+      "credentials": {
+        "serpApi": {
+          "id": "YU973DRwW0CmrVfP",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "KSL_knowledge_base",
+        "toolDescription": "Bruk denne til å svare på spørsmål om SNM, KSL, LokalMat og NytNorge",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "ksl_knowledge_base",
+          "mode": "list",
+          "cachedResultName": "ksl_knowledge_base"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        -120
+      ],
+      "id": "e11a10a6-066e-4747-a885-80848c28ac9d",
+      "name": "Qdrant Vector Store",
+      "credentials": {
+        "qdrantApi": {
+          "id": "by4cZRUMG2dwSSHl",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}{{ $json.message }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        980,
+        -360
+      ],
+      "id": "ae4b7252-21e3-4859-9f36-773a63433e1d",
+      "name": "AI Agent",
+      "notesInFlow": false,
+      "notes": "Du skal huske ditt nicknamw er Tryvi\nDu skal huske du er Tryvi"
+    },
+    {
+      "parameters": {
+        "model": "mistral:7b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        820,
+        -140
+      ],
+      "id": "e252d62a-fbc7-4106-9f12-eecec6a9a660",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "kMb19x2FD9dOJZ3v",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "mistral:7b"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        100
+      ],
+      "id": "8ed40374-890f-4794-87b2-b31da36211aa",
+      "name": "Embeddings Ollama",
+      "credentials": {
+        "ollamaApi": {
+          "id": "kMb19x2FD9dOJZ3v",
+          "name": "Ollama account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Start chat here": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Qdrant Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "30ddcfdd-1ceb-4832-a80b-6f1569ca591b",
+  "triggerCount": 1,
+  "tags": []
+}

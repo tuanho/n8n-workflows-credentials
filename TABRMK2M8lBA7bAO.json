@@ -1,0 +1,21 @@
+{
+  "createdAt": "2025-05-18T10:47:13.102Z",
+  "updatedAt": "2025-06-03T13:07:13.000Z",
+  "id": "TABRMK2M8lBA7bAO",
+  "name": "MCP bitbucket",
+  "active": false,
+  "isArchived": true,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c88f9bcb-57a2-438d-acea-0496027ba435",
+  "triggerCount": 0,
+  "tags": []
+}

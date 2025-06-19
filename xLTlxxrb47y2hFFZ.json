@@ -1,0 +1,260 @@
+{
+  "createdAt": "2025-05-16T12:36:05.904Z",
+  "updatedAt": "2025-06-04T17:32:16.000Z",
+  "id": "xLTlxxrb47y2hFFZ",
+  "name": "KSL chatbot (Postgres mem + Qdrant docker) in used",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        460
+      ],
+      "id": "7ea38f4f-244c-480c-ae2f-8f0c0df13532",
+      "name": "Memory",
+      "credentials": {
+        "postgres": {
+          "id": "LdtYWDG4KT5XTJXa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        460
+      ],
+      "id": "e8b1a3cd-0632-4272-9d51-720dbcdc8c81",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        860,
+        240
+      ],
+      "id": "ff65a782-5dad-4afc-b8ee-b93a716ab3a4",
+      "name": "Start chat here",
+      "webhookId": "50c3357e-0a1b-4d58-8c89-4bc5e6481bca"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        460
+      ],
+      "id": "6b3f88e9-b1ef-4684-b472-24e64ce5eed0",
+      "name": "Google",
+      "credentials": {
+        "serpApi": {
+          "id": "YU973DRwW0CmrVfP",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1080,
+        460
+      ],
+      "id": "ba7a37db-1637-4a37-a655-30ed93e68743",
+      "name": "GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "tZHVT6xgANDw48fc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1640,
+        660
+      ],
+      "id": "b926aad9-46ce-4a42-84f5-ff8454053ab5",
+      "name": "Embeddings GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "tZHVT6xgANDw48fc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Guest: {{ $json.chatInput }}{{ $json.message }}",
+        "options": {
+          "systemMessage": "[\n  {\n    \"role\": \"system\",\n    \"content\": \"You are a helpful assistant named Tryvi. Always introduce yourself as Tryvi, and format as: **Tryvi**: <message> (in Markdown), or use green color for Tryvi if HTML is supported. Always respond in Norwegian, regardless of the language used in the prompt. Svare bare på spørsmål relevant til KSL, norsk mat, nytnorge, lokalmat, norsk lov, bonder, arbeid tilsynet, mat tilsynet, inn på tunet, Norsk Landbruk rådgiving, Veterinær, Folkehelse, tine, nortura.\nAnswer the user’s question using only the context above. If the answer is not found, say you don’t know.\n\"\n  }\n]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1220,
+        240
+      ],
+      "id": "1c4c13a2-a47c-4d09-965e-3bfeff318d6e",
+      "name": "AI Agent",
+      "notesInFlow": false,
+      "alwaysOutputData": false,
+      "notes": "First skal du bruke noden 'Hent info fra knowledage base' til å svare spørsmål. Hvis du ikke kan finne relevant info, da skal du bruke chatGPT"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "KSL_knowledge_base",
+        "toolDescription": "Bruk denne til å svare på spørsmål om SNM, KSL, LokalMat og NytNorge",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "ksl_knowledge_base",
+          "mode": "list",
+          "cachedResultName": "ksl_knowledge_base"
+        },
+        "topK": 64,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.1,
+      "position": [
+        1560,
+        460
+      ],
+      "id": "8a3a0967-fbbe-42db-a248-cc2b4930653e",
+      "name": "Hent info fra knowledage base",
+      "credentials": {
+        "qdrantApi": {
+          "id": "by4cZRUMG2dwSSHl",
+          "name": "QdrantApi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start chat here": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings GPT": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Hent info fra knowledage base",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hent info fra knowledage base": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "dc3a5f11-6d69-4bfd-908b-9e44e9c6aa8c",
+  "triggerCount": 1,
+  "tags": []
+}

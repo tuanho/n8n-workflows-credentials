@@ -1,0 +1,167 @@
+{
+  "createdAt": "2025-06-07T18:24:35.164Z",
+  "updatedAt": "2025-06-18T11:25:30.000Z",
+  "id": "fjpyfF7GvfDkqazx",
+  "name": "Bitbucket AI codereview",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bitbucket-AI-Codereview",
+        "options": {}
+      },
+      "name": "Bitbucket Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1420,
+        -160
+      ],
+      "id": "6901e9b1-9ae2-4495-9fa8-f9a452a5e518",
+      "webhookId": "c0b0a357-7877-4fcf-a7aa-659c218228d0"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prData = {  \n  // pull_request_id: 521,\n  pull_request_id:$input.first().json.body.pullrequest.id ,\n  source_branch: $input.first().json.body.pullrequest.source.branch.name,\n  target_branch: $input.first().json.body.pullrequest.destination.branch.name,\n//  source_branch: \"bugfix/CHEM-1282-display-not-found\",\n//   target_branch: \"trunk\",\n// repository: \"chemrequest-ui\"\n  repository: $input.first().json.body.repository.name,\n  title: $input.first().json.body.pullrequest.title,\n  author: $input.first().json.body.pullrequest.author.display_name\n};\n\nreturn prData;"
+      },
+      "id": "a2c1245d-bbed-44fc-bcc6-14a93324a58b",
+      "name": "Prepare PR Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1200,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://bitbucket-code-reviewer:8080/review",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "2a88276f-5842-4438-b830-f5c32ccffb85",
+      "name": "Call Review Service",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -980,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "ai@integrion.ai",
+        "toEmail": "=tuan.ho@netpower.no",
+        "subject": "={{ $('Prepare PR Data').item.json.author }} has created/updated a PR for {{ $('Prepare PR Data').item.json.title }}",
+        "emailFormat": "text",
+        "text": "=Hei Tuan,\n\nCodereview result for {{ $('Prepare PR Data').item.json.title }}:\n\n{{ $json.review_comments }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        -540,
+        -160
+      ],
+      "id": "3a5ba46a-3899-4c0d-9dd9-5e44b85f3363",
+      "name": "Send Email",
+      "webhookId": "e097b052-9a07-4570-ad91-02b174aa2b7e",
+      "credentials": {
+        "smtp": {
+          "id": "bML9XP67LNREPfuh",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.review_comments }}",
+        "options": {
+          "backslashEscapesHTMLTags": true,
+          "emoji": true,
+          "simpleLineBreaks": true
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -160
+      ],
+      "id": "219b668c-c3db-499f-bb1b-0fe537267c01",
+      "name": "Markdown"
+    }
+  ],
+  "connections": {
+    "Bitbucket Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare PR Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare PR Data": {
+      "main": [
+        [
+          {
+            "node": "Call Review Service",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Review Service": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "8288ade3-97f8-45f6-8e34-6ba0e1157503",
+  "triggerCount": 1,
+  "tags": []
+}

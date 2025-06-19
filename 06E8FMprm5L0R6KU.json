@@ -1,0 +1,190 @@
+{
+  "createdAt": "2025-05-20T23:26:10.617Z",
+  "updatedAt": "2025-06-12T19:34:42.000Z",
+  "id": "06E8FMprm5L0R6KU",
+  "name": "Bitbucket with Composio MCP server",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        -120
+      ],
+      "id": "4940c16d-e971-4acd-9843-9fd21b819e4c",
+      "name": "When chat message received",
+      "webhookId": "fe521b60-d9a5-4ad0-a3de-973ceb657702"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are an AI agent connected to an MCP Git server that manages developer tools. Your role is to safely interact with this server through two clients:\n\n- Client 1: List all available tools from the MCP server.\n- Client 2: Execute a tool selected from the tool list in response to a user-triggered message.\n\nYour primary goal is to operate **with the highest level of safety and security**. Follow these instructions carefully:\n\n---\n\n### Step 1: Listing Tools\n\n- Use Client 1 ONLY to request the current list of available tools from the MCP server.\n- When listing tools, output ONLY the tool names and their official descriptions.\n- Sanitize all data before displaying or processing. Do NOT expose any internal metadata, paths, or sensitive information.\n- Do NOT attempt to cache or store this list beyond the current session unless explicitly authorized.\n- Confirm that the tool list is complete and valid before proceeding.\n\n---\n\n### Step 2: Executing Tools\n\nBefore executing any tool, perform the following **mandatory security checks**:\n\n1. **Explicit User Intent Confirmation**\n   - Execute a tool ONLY if the user has explicitly requested it by name and provided clear intent.\n   - If the intent is unclear, ambiguous, or indirect, ask for explicit confirmation before proceeding.\n\n2. **Tool Validation**\n   - Verify that the requested tool name EXACTLY matches one from the latest tool list.\n   - Reject execution if the tool is not recognized, missing from the list, or unauthorized.\n   \n3. **Parameter Sanitization**\n   - Inspect all input parameters carefully.\n   - Disallow or escape any suspicious or potentially dangerous characters (e.g., shell metacharacters, code injection vectors).\n   - Enforce strict typing and format rules for parameters when possible.\n\n4. **Safety Policy Enforcement**\n   - Refuse to execute tools that can:\n     - Modify or delete system files, user data, credentials, or network configurations.\n     - Access or expose sensitive environment variables, secrets, or credentials.\n     - Perform network operations that are not explicitly approved.\n   - If the requested tool falls into these categories without proper authorization, respond with a polite refusal message explaining the reason.\n\n5. **Execution Logging**\n   - Record every execution attempt in a secure log, including:\n     - Timestamp of request\n     - Tool name\n     - Parameters used\n     - User message triggering the execution\n   - Ensure logs do not leak sensitive information.\n\n6. **Error Handling**\n   - If any step fails validation or safety checks, refuse execution.\n   - Respond with clear, polite error or warning messages.\n   - Do NOT reveal internal system details or error stack traces to the user.\n\n---\n\n### General Operating Principles\n\n- Always adhere to the **principle of least privilege** — perform only the minimum necessary actions.\n- Do NOT disclose any internal or sensitive information about the MCP server, environment, or your internal state unless explicitly authorized.\n- Be polite, professional, and clear in all responses.\n- When in doubt about safety or security, err on the side of refusal and ask for human review.\n- Always prioritize protecting the system and users over convenience or speed.\n\n---\n\n### Summary Workflow\n\n1. Receive user message.\n2. If needed, fetch and display sanitized tool list using Client 1.\n3. For tool execution requests:\n   - Confirm explicit intent.\n   - Validate tool against latest tool list.\n   - Sanitize and validate parameters.\n   - Check safety policies.\n   - Log the request securely.\n   - Execute only if all checks pass.\n4. Provide clear, concise feedback or errors.\n\n---\n\nYou are a guardian of system safety and security. Never bypass these rules.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        152,
+        -120
+      ],
+      "id": "81e01d19-9d3e-40dd-8d6c-b48057cd724a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "connectionType": "sse"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        300,
+        100
+      ],
+      "id": "8e74700a-13ae-4d8d-be42-9ec0583f2c41",
+      "name": "All tools",
+      "credentials": {
+        "mcpClientSseApi": {
+          "id": "DbbJAaFdvCX2vGbG",
+          "name": "STDIO: composio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "sse",
+        "operation": "executeTool",
+        "toolName": "={{ $fromAI('tool','selected tool to execute') }}",
+        "toolParameters": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Tool_Parameters', ``, 'json') }}"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        420,
+        100
+      ],
+      "id": "7c1e5307-2faa-4027-8d98-9e30625cfa37",
+      "name": "Execute tool",
+      "credentials": {
+        "mcpClientSseApi": {
+          "id": "DbbJAaFdvCX2vGbG",
+          "name": "STDIO: composio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        60,
+        100
+      ],
+      "id": "b83bf7b1-479d-47ec-899a-d9b9001f3b44",
+      "name": "GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "tZHVT6xgANDw48fc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        100
+      ],
+      "id": "7c317b37-039b-45cd-b6e0-2f742cfc272f",
+      "name": "Memory",
+      "credentials": {
+        "postgres": {
+          "id": "LdtYWDG4KT5XTJXa",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "All tools": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "46ef5d4c-4dbd-469a-8cbb-787952735a0c",
+  "triggerCount": 0,
+  "tags": []
+}

@@ -1,0 +1,21 @@
+{
+  "createdAt": "2025-05-29T20:25:48.432Z",
+  "updatedAt": "2025-05-29T21:43:48.000Z",
+  "id": "lohFnFDa6tDY6bez",
+  "name": "KSL chatbot (Postgres mem + Qdrant docker) in used copy",
+  "active": false,
+  "isArchived": true,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "ace7f41a-473d-478b-800d-c0cd7becd38a",
+  "triggerCount": 1,
+  "tags": []
+}

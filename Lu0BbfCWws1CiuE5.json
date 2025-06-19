@@ -1,0 +1,253 @@
+{
+  "createdAt": "2025-05-16T11:52:20.666Z",
+  "updatedAt": "2025-06-04T14:46:31.000Z",
+  "id": "Lu0BbfCWws1CiuE5",
+  "name": "KSL chatbot (Postgres mem + Supabase cloud)",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        -100
+      ],
+      "id": "e54e8f82-523f-49b6-b550-0103ec07558c",
+      "name": "Memory",
+      "credentials": {
+        "postgres": {
+          "id": "LdtYWDG4KT5XTJXa",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        -100
+      ],
+      "id": "bf46c4b7-cba7-4274-9640-e064722c858b",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1140,
+        -360
+      ],
+      "id": "757e67ee-b1d3-4fef-83d3-b82367e33165",
+      "name": "Tryvi - KSL chatbot",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "ksl_knowledge_base",
+        "toolDescription": "Bruk denne til å svare spørsmål om SNM, KSL, LokalMat og NytNorge",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.1,
+      "position": [
+        1320,
+        -100
+      ],
+      "id": "067d8927-f3bc-4301-a8ef-321c7f0d32f9",
+      "name": "SNM knowledge base",
+      "credentials": {
+        "supabaseApi": {
+          "id": "4iL2z4rWW1kpQ0DB",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hei!👋 Jeg er Tryvi – Hva lurer du på i dag?\nHvem jeg snakker med?",
+        "options": {
+          "subtitle": "Tryvi  – din digitale hjelper fra Stiftelsen Norsk Mat, her for deg døgnet rundt.",
+          "title": "Stiftelsen Norsk Mat"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        760,
+        -360
+      ],
+      "id": "8201090a-73e4-4f57-8463-6693549bd3c1",
+      "name": "Start chat here",
+      "webhookId": "7b41946d-b787-42a2-82e2-9702f46558dc"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        -100
+      ],
+      "id": "db7310d7-c340-48dd-9e0c-9127a76b45bc",
+      "name": "Google",
+      "credentials": {
+        "serpApi": {
+          "id": "YU973DRwW0CmrVfP",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        960,
+        -100
+      ],
+      "id": "d2adad35-8d30-4c1c-8e2d-a55b88a3f4ff",
+      "name": "GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "tZHVT6xgANDw48fc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1340,
+        80
+      ],
+      "id": "fdcfa8fd-503e-498a-9695-e2091e2fb7a4",
+      "name": "Embeddings GPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "tZHVT6xgANDw48fc",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SNM knowledge base": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start chat here": {
+      "main": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Tryvi - KSL chatbot",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings GPT": {
+      "ai_embedding": [
+        [
+          {
+            "node": "SNM knowledge base",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "16605869-b7bb-411b-ade0-108ba4c6b483",
+  "triggerCount": 0,
+  "tags": []
+}

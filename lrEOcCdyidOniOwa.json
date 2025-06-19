@@ -1,0 +1,9 @@
+{
+  "createdAt": "2025-05-23T19:57:39.016Z",
+  "updatedAt": "2025-05-23T19:57:38.977Z",
+  "id": "lrEOcCdyidOniOwa",
+  "name": "Header Auth account",
+  "data": "U2FsdGVkX185TaxZ1k00VZDBMmxUnaMsFR5bSR8oKVw55PqJ9zvmFbUS/48bn0A9XO+uPV8+cQtbjPM1G68T9Q==",
+  "type": "httpHeaderAuth",
+  "isManaged": false
+}

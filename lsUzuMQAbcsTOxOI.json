@@ -1,0 +1,70 @@
+{
+  "createdAt": "2025-07-30T06:54:57.725Z",
+  "updatedAt": "2025-07-30T07:03:23.000Z",
+  "id": "lsUzuMQAbcsTOxOI",
+  "name": "My workflow 4",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "e7dba269-48e4-4797-ab38-da4f9644ea18",
+        "authentication": "basicAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e425ada4-fb54-4252-8357-2c5e86939403",
+      "name": "Webhook",
+      "webhookId": "e7dba269-48e4-4797-ab38-da4f9644ea18",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "2V7fVDigAkjvTXD3",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const prData = {  \n  // pull_request_id: 521,\n  pull_request_id:$input.first().json.body.pullrequest.id ,\n  source_branch: $input.first().json.body.pullrequest.source.branch.name,\n  target_branch: $input.first().json.body.pullrequest.destination.branch.name,\n//  source_branch: \"bugfix/CHEM-1282-display-not-found\",\n//   target_branch: \"trunk\",\n// repository: \"chemrequest-ui\"\n  repository: $input.first().json.body.repository.name,\n  title: $input.first().json.body.pullrequest.title,\n  author: $input.first().json.body.pullrequest.author.display_name\n};\n\nreturn prData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "4c208681-f39f-4721-b618-5ea2b531a4d8",
+      "name": "Code"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "7f819cce-d314-4b48-a0d6-97c3a70ee419",
+  "triggerCount": 1,
+  "tags": []
+}

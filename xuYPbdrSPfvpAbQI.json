@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-30T10:14:25.268Z",
   "updatedAt": "2025-05-30T12:35:16.000Z",
+  "createdAt": "2025-05-30T10:14:25.268Z",
   "id": "xuYPbdrSPfvpAbQI",
   "name": "Babies",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -336,6 +337,25 @@
   "meta": null,
   "pinData": {},
   "versionId": "90c57207-ccb8-48f8-aa87-4decf2e6dbb7",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-30T10:14:25.317Z",
+      "createdAt": "2025-05-30T10:14:25.317Z",
+      "role": "workflow:owner",
+      "workflowId": "xuYPbdrSPfvpAbQI",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

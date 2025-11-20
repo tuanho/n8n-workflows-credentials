@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-23T19:53:42.860Z",
   "updatedAt": "2025-05-23T21:16:48.000Z",
+  "createdAt": "2025-05-23T19:53:42.860Z",
   "id": "FXwj7VqmpllEj1Lt",
   "name": "MCP Server",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -210,6 +211,25 @@
   "meta": null,
   "pinData": {},
   "versionId": "e26c5e2d-e233-4861-bfaa-812fe60d21b2",
+  "versionCounter": 1,
   "triggerCount": 1,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-23T19:53:42.878Z",
+      "createdAt": "2025-05-23T19:53:42.878Z",
+      "role": "workflow:owner",
+      "workflowId": "FXwj7VqmpllEj1Lt",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

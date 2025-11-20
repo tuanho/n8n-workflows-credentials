@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-17T11:23:46.728Z",
   "updatedAt": "2025-06-04T14:47:14.000Z",
+  "createdAt": "2025-05-17T11:23:46.728Z",
   "id": "Z6pfAMGtaj0TGEV3",
   "name": "KSL chatbot knowledge base (Pinecone)",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -151,6 +152,25 @@
   },
   "pinData": {},
   "versionId": "aff812a1-b83d-4fb0-9a0f-5c04e5c22a56",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-17T11:23:46.738Z",
+      "createdAt": "2025-05-17T11:23:46.738Z",
+      "role": "workflow:owner",
+      "workflowId": "Z6pfAMGtaj0TGEV3",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-20T14:06:47.778Z",
   "updatedAt": "2025-06-12T11:06:44.000Z",
+  "createdAt": "2025-05-20T14:06:47.778Z",
   "id": "CzzVvdlT0UEMJZKG",
   "name": "Apify",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [],
@@ -18,6 +19,25 @@
   },
   "pinData": {},
   "versionId": "891ab045-c811-4435-b489-32a54782ddd0",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-20T14:06:47.793Z",
+      "createdAt": "2025-05-20T14:06:47.793Z",
+      "role": "workflow:owner",
+      "workflowId": "CzzVvdlT0UEMJZKG",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

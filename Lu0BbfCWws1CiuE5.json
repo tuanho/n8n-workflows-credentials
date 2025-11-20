@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-16T11:52:20.666Z",
   "updatedAt": "2025-06-04T14:46:31.000Z",
+  "createdAt": "2025-05-16T11:52:20.666Z",
   "id": "Lu0BbfCWws1CiuE5",
   "name": "KSL chatbot (Postgres mem + Supabase cloud)",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -248,6 +249,25 @@
   },
   "pinData": {},
   "versionId": "16605869-b7bb-411b-ade0-108ba4c6b483",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-16T11:52:20.676Z",
+      "createdAt": "2025-05-16T11:52:20.676Z",
+      "role": "workflow:owner",
+      "workflowId": "Lu0BbfCWws1CiuE5",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

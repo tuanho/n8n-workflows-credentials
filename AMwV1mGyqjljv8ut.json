@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-27T12:16:37.963Z",
   "updatedAt": "2025-05-28T14:07:53.000Z",
+  "createdAt": "2025-05-27T12:16:37.963Z",
   "id": "AMwV1mGyqjljv8ut",
   "name": "My workflow 2",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [],
@@ -16,6 +17,25 @@
   },
   "pinData": {},
   "versionId": "dd97d591-e905-4d70-a3cd-2bde9803a53f",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-27T12:16:37.988Z",
+      "createdAt": "2025-05-27T12:16:37.988Z",
+      "role": "workflow:owner",
+      "workflowId": "AMwV1mGyqjljv8ut",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-18T10:18:43.310Z",
   "updatedAt": "2025-05-23T21:38:35.000Z",
+  "createdAt": "2025-05-18T10:18:43.310Z",
   "id": "Ox6snDVtQ6xXad0d",
   "name": "MCP copied from n8n",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -1662,6 +1663,25 @@
   "meta": null,
   "pinData": {},
   "versionId": "0696f271-6d75-4c66-a78e-98e4d16fb297",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-18T10:18:43.326Z",
+      "createdAt": "2025-05-18T10:18:43.326Z",
+      "role": "workflow:owner",
+      "workflowId": "Ox6snDVtQ6xXad0d",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

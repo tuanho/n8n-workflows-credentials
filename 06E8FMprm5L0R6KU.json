@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-20T23:26:10.617Z",
   "updatedAt": "2025-06-12T19:34:42.000Z",
+  "createdAt": "2025-05-20T23:26:10.617Z",
   "id": "06E8FMprm5L0R6KU",
   "name": "Bitbucket with Composio MCP server",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -185,6 +186,25 @@
   },
   "pinData": {},
   "versionId": "46ef5d4c-4dbd-469a-8cbb-787952735a0c",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-20T23:26:10.625Z",
+      "createdAt": "2025-05-20T23:26:10.625Z",
+      "role": "workflow:owner",
+      "workflowId": "06E8FMprm5L0R6KU",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

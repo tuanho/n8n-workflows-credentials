@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-21T09:19:41.755Z",
   "updatedAt": "2025-08-20T11:16:54.000Z",
+  "createdAt": "2025-05-21T09:19:41.755Z",
   "id": "pdpVA7nFetm13G11",
   "name": "[Trung- testing] KSL chatbot (Postgres mem + Qdrant docker)",
+  "description": null,
   "active": false,
   "isArchived": false,
   "nodes": [
@@ -195,6 +196,25 @@
   },
   "pinData": {},
   "versionId": "e0edacb6-874c-4421-bc10-f6ed6acdf017",
+  "versionCounter": 1,
   "triggerCount": 1,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-21T09:19:41.778Z",
+      "createdAt": "2025-05-21T09:19:41.778Z",
+      "role": "workflow:owner",
+      "workflowId": "pdpVA7nFetm13G11",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

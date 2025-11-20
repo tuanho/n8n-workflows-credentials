@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-23T19:47:11.784Z",
   "updatedAt": "2025-05-28T15:37:03.000Z",
+  "createdAt": "2025-05-23T19:47:11.784Z",
   "id": "8YKlc9Yvl8G0sLzX",
   "name": "WebScrapper",
+  "description": null,
   "active": false,
   "isArchived": false,
   "nodes": [
@@ -944,6 +945,25 @@
   },
   "pinData": {},
   "versionId": "f4f4f4e4-7e8e-475f-ac2b-b14f2882f785",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-23T19:47:11.805Z",
+      "createdAt": "2025-05-23T19:47:11.805Z",
+      "role": "workflow:owner",
+      "workflowId": "8YKlc9Yvl8G0sLzX",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

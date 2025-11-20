@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-17T21:59:53.847Z",
   "updatedAt": "2025-06-04T14:47:06.000Z",
+  "createdAt": "2025-05-17T21:59:53.847Z",
   "id": "uGbLV4gbw4IamOd4",
   "name": "KSL chatbot (Postgres mem + Pinecone)",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -252,6 +253,25 @@
   },
   "pinData": {},
   "versionId": "8686d2a1-f625-415a-a180-74eab5a48784",
+  "versionCounter": 1,
   "triggerCount": 1,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-17T21:59:53.852Z",
+      "createdAt": "2025-05-17T21:59:53.852Z",
+      "role": "workflow:owner",
+      "workflowId": "uGbLV4gbw4IamOd4",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

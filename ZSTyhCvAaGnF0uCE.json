@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-16T11:58:02.471Z",
   "updatedAt": "2025-06-04T14:46:33.000Z",
+  "createdAt": "2025-05-16T11:58:02.471Z",
   "id": "ZSTyhCvAaGnF0uCE",
   "name": "KSL chatbot knowledge base (Supabase cloud)",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -150,6 +151,25 @@
   },
   "pinData": {},
   "versionId": "f2089401-dc2e-4f16-95f0-f7d8e63b529b",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-16T11:58:02.479Z",
+      "createdAt": "2025-05-16T11:58:02.479Z",
+      "role": "workflow:owner",
+      "workflowId": "ZSTyhCvAaGnF0uCE",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

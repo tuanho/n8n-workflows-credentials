@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-06-07T18:24:35.164Z",
   "updatedAt": "2025-06-18T11:25:30.000Z",
+  "createdAt": "2025-06-07T18:24:35.164Z",
   "id": "fjpyfF7GvfDkqazx",
   "name": "Bitbucket AI codereview",
+  "description": null,
   "active": true,
   "isArchived": false,
   "nodes": [
@@ -162,6 +163,25 @@
   },
   "pinData": {},
   "versionId": "8288ade3-97f8-45f6-8e34-6ba0e1157503",
+  "versionCounter": 4,
   "triggerCount": 1,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-06-07T18:24:35.192Z",
+      "createdAt": "2025-06-07T18:24:35.192Z",
+      "role": "workflow:owner",
+      "workflowId": "fjpyfF7GvfDkqazx",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

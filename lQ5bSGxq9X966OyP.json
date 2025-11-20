@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-23T21:41:08.756Z",
   "updatedAt": "2025-06-04T14:46:51.000Z",
+  "createdAt": "2025-05-23T21:41:08.756Z",
   "id": "lQ5bSGxq9X966OyP",
   "name": "KSL chatbot (Postgres, Qdrant and Ollama)",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -231,6 +232,25 @@
   },
   "pinData": {},
   "versionId": "30ddcfdd-1ceb-4832-a80b-6f1569ca591b",
+  "versionCounter": 1,
   "triggerCount": 1,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-23T21:41:08.791Z",
+      "createdAt": "2025-05-23T21:41:08.791Z",
+      "role": "workflow:owner",
+      "workflowId": "lQ5bSGxq9X966OyP",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-06-01T12:35:01.142Z",
   "updatedAt": "2025-06-03T10:41:35.000Z",
+  "createdAt": "2025-06-01T12:35:01.142Z",
   "id": "7tvVvtzh8Dd5sY3a",
   "name": "Git",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -345,6 +346,25 @@
   "meta": null,
   "pinData": {},
   "versionId": "9921774c-31c5-4d16-9ae1-58e0e32a23b3",
+  "versionCounter": 1,
   "triggerCount": 0,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-06-01T12:35:01.201Z",
+      "createdAt": "2025-06-01T12:35:01.201Z",
+      "role": "workflow:owner",
+      "workflowId": "7tvVvtzh8Dd5sY3a",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

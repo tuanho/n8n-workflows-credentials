@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-29T21:44:02.363Z",
   "updatedAt": "2025-06-04T09:44:10.000Z",
+  "createdAt": "2025-05-29T21:44:02.363Z",
   "id": "fVYaJ9CtSapXOiJw",
   "name": "KSL chatbot (Postgres mem + Qdrant docker) in used copy 2",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -261,6 +262,25 @@
   },
   "pinData": {},
   "versionId": "acff558a-f60d-490d-8455-cc9e2b2f5435",
+  "versionCounter": 1,
   "triggerCount": 1,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-29T21:44:02.385Z",
+      "createdAt": "2025-05-29T21:44:02.385Z",
+      "role": "workflow:owner",
+      "workflowId": "fVYaJ9CtSapXOiJw",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

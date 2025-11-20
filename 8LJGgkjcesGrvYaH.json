@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-05-23T21:40:24.067Z",
   "updatedAt": "2025-06-04T14:46:54.000Z",
+  "createdAt": "2025-05-23T21:40:24.067Z",
   "id": "8LJGgkjcesGrvYaH",
   "name": "KSL chatbot knowledge base (Qdrand and Ollama)",
+  "description": null,
   "active": false,
   "isArchived": true,
   "nodes": [
@@ -151,6 +152,25 @@
   },
   "pinData": {},
   "versionId": "db04717d-d06f-4aed-af70-1d260a5a8fb4",
+  "versionCounter": 1,
   "triggerCount": 1,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-05-23T21:40:24.103Z",
+      "createdAt": "2025-05-23T21:40:24.103Z",
+      "role": "workflow:owner",
+      "workflowId": "8LJGgkjcesGrvYaH",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

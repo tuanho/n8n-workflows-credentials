@@ -1,8 +1,9 @@
 {
-  "createdAt": "2025-06-06T08:41:42.786Z",
   "updatedAt": "2025-06-07T20:01:46.000Z",
+  "createdAt": "2025-06-06T08:41:42.786Z",
   "id": "QQYtIGHVrhHm3TZ3",
   "name": "Bitbucket mcp",
+  "description": null,
   "active": false,
   "isArchived": false,
   "nodes": [
@@ -477,6 +478,25 @@
   },
   "pinData": {},
   "versionId": "ae6da240-0de0-4f29-ace3-008373bef12b",
+  "versionCounter": 1,
   "triggerCount": 2,
-  "tags": []
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2025-06-06T08:41:42.811Z",
+      "createdAt": "2025-06-06T08:41:42.811Z",
+      "role": "workflow:owner",
+      "workflowId": "QQYtIGHVrhHm3TZ3",
+      "projectId": "idftf7UI0l2sFgzw",
+      "project": {
+        "updatedAt": "2025-05-16T11:51:47.189Z",
+        "createdAt": "2025-05-16T11:23:15.707Z",
+        "id": "idftf7UI0l2sFgzw",
+        "name": "Tuan Ho <hotuan@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

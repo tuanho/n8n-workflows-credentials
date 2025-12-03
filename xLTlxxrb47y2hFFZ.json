@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-06-04T17:32:16.000Z",
+  "updatedAt": "2025-12-03T23:00:24.000Z",
   "createdAt": "2025-05-16T12:36:05.904Z",
   "id": "xLTlxxrb47y2hFFZ",
   "name": "KSL chatbot (Postgres mem + Qdrant docker) in used",
@@ -14,8 +14,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        1200,
-        460
+        1216,
+        464
       ],
       "id": "7ea38f4f-244c-480c-ae2f-8f0c0df13532",
       "name": "Memory",
@@ -25,17 +25,6 @@
           "name": "Postgres account"
         }
       }
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
-      "typeVersion": 1,
-      "position": [
-        1320,
-        460
-      ],
-      "id": "e8b1a3cd-0632-4272-9d51-720dbcdc8c81",
-      "name": "Wikipedia"
     },
     {
       "parameters": {
@@ -48,31 +37,12 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.1,
       "position": [
-        860,
+        864,
         240
       ],
       "id": "ff65a782-5dad-4afc-b8ee-b93a716ab3a4",
       "name": "Start chat here",
       "webhookId": "50c3357e-0a1b-4d58-8c89-4bc5e6481bca"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
-      "typeVersion": 1,
-      "position": [
-        1440,
-        460
-      ],
-      "id": "6b3f88e9-b1ef-4684-b472-24e64ce5eed0",
-      "name": "Google",
-      "credentials": {
-        "serpApi": {
-          "id": "YU973DRwW0CmrVfP",
-          "name": "SerpAPI account"
-        }
-      }
     },
     {
       "parameters": {
@@ -87,8 +57,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        1080,
-        460
+        1088,
+        464
       ],
       "id": "ba7a37db-1637-4a37-a655-30ed93e68743",
       "name": "GPT",
@@ -106,8 +76,8 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
       "typeVersion": 1.2,
       "position": [
-        1640,
-        660
+        1424,
+        672
       ],
       "id": "b926aad9-46ce-4a42-84f5-ff8454053ab5",
       "name": "Embeddings GPT",
@@ -129,7 +99,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.9,
       "position": [
-        1220,
+        1152,
         240
       ],
       "id": "1c4c13a2-a47c-4d09-965e-3bfeff318d6e",
@@ -155,8 +125,8 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.1,
       "position": [
-        1560,
-        460
+        1344,
+        464
       ],
       "id": "8a3a0967-fbbe-42db-a248-cc2b4930653e",
       "name": "Hent info fra knowledage base",
@@ -166,6 +136,21 @@
           "name": "QdrantApi account"
         }
       }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"output\": \"{{ $json.output }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1504,
+        240
+      ],
+      "id": "193eafaf-eb06-4e6b-8a99-680047d7f1ea",
+      "name": "Respond to Webhook"
     }
   ],
   "connections": {
@@ -180,34 +165,12 @@
         ]
       ]
     },
-    "Wikipedia": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Start chat here": {
       "main": [
         [
           {
             "node": "AI Agent",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -245,6 +208,17 @@
           }
         ]
       ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -255,8 +229,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "dc3a5f11-6d69-4bfd-908b-9e44e9c6aa8c",
-  "versionCounter": 4,
+  "versionId": "5605e5d4-d6a3-4b0e-83dd-c79e8e191d91",
+  "versionCounter": 10,
   "triggerCount": 1,
   "tags": [],
   "shared": [

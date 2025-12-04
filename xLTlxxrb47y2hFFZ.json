@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-03T23:00:24.000Z",
+  "updatedAt": "2025-12-03T23:10:33.000Z",
   "createdAt": "2025-05-16T12:36:05.904Z",
   "id": "xLTlxxrb47y2hFFZ",
   "name": "KSL chatbot (Postgres mem + Qdrant docker) in used",
@@ -140,7 +140,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={\n  \"output\": \"{{ $json.output }}\"\n}",
+        "responseBody": "={{ { \"output\": $json.output } }}",
         "options": {}
       },
       "type": "n8n-nodes-base.respondToWebhook",
@@ -229,8 +229,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "5605e5d4-d6a3-4b0e-83dd-c79e8e191d91",
-  "versionCounter": 10,
+  "versionId": "c385e63a-52e5-427c-808b-f3a0758fcfca",
+  "versionCounter": 12,
   "triggerCount": 1,
   "tags": [],
   "shared": [
